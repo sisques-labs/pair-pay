@@ -1,0 +1,97 @@
+// PairPay Database Schema with Prisma
+// Supabase PostgreSQL database
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+// ============================================================================
+// MODELS
+// ============================================================================
+
+// Profile table - extends Supabase auth.users
+model Profile {
+  id        String    @id @db.Uuid
+  email     String
+  fullName  String?   @map("full_name")
+  coupleId  String?   @map("couple_id") @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  couple              Couple?      @relation(fields: [coupleId], references: [id], onDelete: SetNull)
+  expensesPaid        Expense[]    @relation("ExpensesPaidBy")
+  expensesCreated     Expense[]    @relation("ExpensesCreatedBy")
+  settlementsFrom     Settlement[] @relation("SettlementsFrom")
+  settlementsTo       Settlement[] @relation("SettlementsTo")
+  couplesCreated      Couple[]     @relation("CoupleCreatedBy")
+
+  @@index([coupleId])
+  @@map("profiles")
+}
+
+// Couple table
+model Couple {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invitationCode String    @unique @map("invitation_code")
+  createdBy      String    @map("created_by") @db.Uuid
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  profiles    Profile[]    @relation
+  creator     Profile      @relation("CoupleCreatedBy", fields: [createdBy], references: [id])
+  expenses    Expense[]
+  settlements Settlement[]
+
+  @@map("couples")
+}
+
+// Expense table
+model Expense {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  coupleId    String    @map("couple_id") @db.Uuid
+  description String
+  amount      Decimal   @db.Decimal(10, 2)
+  category    String
+  paidBy      String    @map("paid_by") @db.Uuid
+  createdBy   String    @map("created_by") @db.Uuid
+  expenseDate DateTime  @default(now()) @map("expense_date") @db.Date
+  notes       String?
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  couple  Couple  @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  paidByUser Profile @relation("ExpensesPaidBy", fields: [paidBy], references: [id])
+  createdByUser Profile @relation("ExpensesCreatedBy", fields: [createdBy], references: [id])
+
+  @@index([coupleId])
+  @@index([createdAt(sort: Desc)])
+  @@index([expenseDate(sort: Desc)])
+  @@map("expenses")
+}
+
+// Settlement table
+model Settlement {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  coupleId  String   @map("couple_id") @db.Uuid
+  fromUser  String   @map("from_user") @db.Uuid
+  toUser    String   @map("to_user") @db.Uuid
+  amount    Decimal  @db.Decimal(10, 2)
+  settledAt DateTime @default(now()) @map("settled_at") @db.Timestamptz(6)
+  notes     String?
+
+  // Relations
+  couple       Couple  @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  fromUserProfile Profile @relation("SettlementsFrom", fields: [fromUser], references: [id])
+  toUserProfile   Profile @relation("SettlementsTo", fields: [toUser], references: [id])
+
+  @@index([coupleId])
+  @@index([settledAt(sort: Desc)])
+  @@map("settlements")
+}
