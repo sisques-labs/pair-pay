@@ -22,11 +22,11 @@ export function BalanceCard({ balance, currentUserId }: BalanceCardProps) {
       <CardHeader className="bg-gradient-to-br from-primary/5 to-accent/5 border-b">
         <CardTitle className="flex items-center gap-2">
           {isBalanced ? (
-            <CheckCircle2 className="h-5 w-5 text-green-600" />
+            <CheckCircle2 className="h-5 w-5 text-primary" />
           ) : currentUserOwes ? (
-            <TrendingDown className="h-5 w-5 text-orange-600" />
+            <TrendingDown className="h-5 w-5 text-muted-foreground" />
           ) : (
-            <TrendingUp className="h-5 w-5 text-green-600" />
+            <TrendingUp className="h-5 w-5 text-primary" />
           )}
           Balance Actual
         </CardTitle>
@@ -37,11 +37,11 @@ export function BalanceCard({ balance, currentUserId }: BalanceCardProps) {
         <div className="text-center space-y-4">
           {isBalanced ? (
             <div className="space-y-3">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-950">
-                <CheckCircle2 className="h-8 w-8 text-green-600 dark:text-green-400" />
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10">
+                <CheckCircle2 className="h-8 w-8 text-primary" />
               </div>
               <div>
-                <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-1">
+                <div className="text-3xl font-bold text-primary mb-1">
                   ¡Todo en orden!
                 </div>
                 <p className="text-muted-foreground">
@@ -53,7 +53,7 @@ export function BalanceCard({ balance, currentUserId }: BalanceCardProps) {
             <div className="space-y-4">
               {/* Amount */}
               <div className="space-y-2">
-                <div className={`text-6xl md:text-7xl font-bold tabular-nums ${currentUserOwes ? 'text-orange-600 dark:text-orange-400' : 'text-green-600 dark:text-green-400'}`}>
+                <div className={`text-6xl md:text-7xl font-bold tabular-nums ${currentUserOwes ? 'text-muted-foreground dark:text-muted-foreground' : 'text-primary'}`}>
                   {formatCurrency(balance.netBalance)}
                 </div>
                 <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
@@ -74,7 +74,7 @@ export function BalanceCard({ balance, currentUserId }: BalanceCardProps) {
               {/* Payment direction visual */}
               <div className="flex items-center justify-center gap-3 py-4">
                 <div className="flex flex-col items-center gap-2">
-                  <div className={`w-12 h-12 rounded-full ${currentUserOwes ? 'bg-orange-100 dark:bg-orange-950' : 'bg-muted'} flex items-center justify-center`}>
+                  <div className={`w-12 h-12 rounded-full ${currentUserOwes ? 'bg-muted' : 'bg-muted'} flex items-center justify-center`}>
                     <span className="text-xl">
                       {currentUserOwes ? '😬' : '😊'}
                     </span>
@@ -85,11 +85,11 @@ export function BalanceCard({ balance, currentUserId }: BalanceCardProps) {
                 </div>
 
                 <div className="flex flex-col items-center">
-                  <ArrowRight className={`h-8 w-8 ${currentUserOwes ? 'text-orange-500' : 'text-green-500'}`} />
+                  <ArrowRight className={`h-8 w-8 ${currentUserOwes ? 'text-muted-foreground' : 'text-primary'}`} />
                 </div>
 
                 <div className="flex flex-col items-center gap-2">
-                  <div className={`w-12 h-12 rounded-full ${!currentUserOwes ? 'bg-green-100 dark:bg-green-950' : 'bg-muted'} flex items-center justify-center`}>
+                  <div className={`w-12 h-12 rounded-full ${!currentUserOwes ? 'bg-primary/10' : 'bg-muted'} flex items-center justify-center`}>
                     <span className="text-xl">
                       {!currentUserOwes ? '😬' : '😊'}
                     </span>
@@ -132,7 +132,7 @@ export function BalanceCard({ balance, currentUserId }: BalanceCardProps) {
                 <Separator className="my-2" />
                 <div className="flex justify-between items-center">
                   <span className="text-xs font-semibold">Balance</span>
-                  <span className={`font-mono font-bold ${currentUserBalance.balance >= 0 ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                  <span className={`font-mono font-bold ${currentUserBalance.balance >= 0 ? 'text-primary' : 'text-muted-foreground dark:text-muted-foreground'}`}>
                     {currentUserBalance.balance >= 0 ? '+' : ''}{formatCurrency(Math.abs(currentUserBalance.balance))}
                   </span>
                 </div>
@@ -160,7 +160,7 @@ export function BalanceCard({ balance, currentUserId }: BalanceCardProps) {
                 <Separator className="my-2" />
                 <div className="flex justify-between items-center">
                   <span className="text-xs font-semibold">Balance</span>
-                  <span className={`font-mono font-bold ${otherUserBalance.balance >= 0 ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                  <span className={`font-mono font-bold ${otherUserBalance.balance >= 0 ? 'text-primary' : 'text-muted-foreground dark:text-muted-foreground'}`}>
                     {otherUserBalance.balance >= 0 ? '+' : ''}{formatCurrency(Math.abs(otherUserBalance.balance))}
                   </span>
                 </div>

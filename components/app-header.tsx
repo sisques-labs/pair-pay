@@ -53,7 +53,7 @@ export function AppHeader() {
                       className={cn(
                         "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-accent/50",
                         isActive
-                          ? "text-primary bg-accent"
+                          ? "text-primary-foreground bg-primary"
                           : "text-muted-foreground hover:text-foreground"
                       )}
                     >

@@ -119,7 +119,7 @@ export function SettlementHistory({ settlements, currentUserId }: SettlementHist
                     <div className="flex items-center gap-2 flex-wrap">
                       <div className={`flex items-center gap-2 text-sm ${isCurrentUserFrom ? 'font-semibold' : ''}`}>
                         {isCurrentUserFrom && (
-                          <div className="h-2 w-2 rounded-full bg-orange-500" />
+                          <div className="h-2 w-2 rounded-full bg-muted-foreground" />
                         )}
                         <span className="truncate">
                           {isCurrentUserFrom ? 'Tú' : fromName}
@@ -128,7 +128,7 @@ export function SettlementHistory({ settlements, currentUserId }: SettlementHist
                       <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0" />
                       <div className={`flex items-center gap-2 text-sm ${isCurrentUserTo ? 'font-semibold' : ''}`}>
                         {isCurrentUserTo && (
-                          <div className="h-2 w-2 rounded-full bg-green-500" />
+                          <div className="h-2 w-2 rounded-full bg-primary" />
                         )}
                         <span className="truncate">
                           {isCurrentUserTo ? 'Tú' : toName}

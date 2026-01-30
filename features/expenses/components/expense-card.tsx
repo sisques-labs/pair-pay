@@ -56,7 +56,7 @@ export function ExpenseCard({ expense, currentUserId }: ExpenseCardProps) {
                 </span>
                 <div className={cn(
                   "text-sm font-medium",
-                  isPaidByCurrentUser ? "text-green-600 dark:text-green-400" : "text-orange-600 dark:text-orange-400"
+                  isPaidByCurrentUser ? "text-primary" : "text-muted-foreground"
                 )}>
                   {isPaidByCurrentUser ? (
                     <>Te deben: {formatCurrency(splitAmount)}</>
