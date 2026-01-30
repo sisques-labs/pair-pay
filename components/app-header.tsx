@@ -32,7 +32,7 @@ export function AppHeader() {
     <>
       {/* Desktop Header */}
       <header className="border-b bg-background sticky top-0 z-40 md:relative">
-        <div className="container mx-auto px-4 py-3 md:py-4">
+        <div className="px-4 py-3 md:px-8 md:py-4 lg:px-12">
           <div className="flex items-center">
             {/* Left: Logo + Navigation */}
             <div className="flex items-center gap-6 md:gap-8 flex-1">
