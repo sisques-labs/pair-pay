@@ -10,6 +10,7 @@ import type {
   UpdateExpenseInput,
   UpdateExpenseResponse,
   DeleteExpenseResponse,
+  Expense,
 } from './types';
 
 /**
@@ -50,7 +51,7 @@ export async function createExpense(input: CreateExpenseInput): Promise<CreateEx
       expense: {
         ...expense,
         amount: expense.amount.toNumber(),
-      },
+      } as Expense,
     };
   } catch (error) {
     console.error('Error creating expense:', error);
@@ -103,7 +104,7 @@ export async function updateExpense(
       expense: {
         ...expense,
         amount: expense.amount.toNumber(),
-      },
+      } as Expense,
     };
   } catch (error) {
     console.error('Error updating expense:', error);

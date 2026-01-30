@@ -116,7 +116,7 @@ export function ExpenseForm({ expense, members, currentUserId }: ExpenseFormProp
 
             <div className="space-y-2">
               <Label htmlFor="category">Categoría</Label>
-              <Select value={category} onValueChange={setCategory} disabled={isLoading}>
+              <Select value={category} onValueChange={(value) => setCategory(value as typeof category)} disabled={isLoading}>
                 <SelectTrigger id="category">
                   <SelectValue />
                 </SelectTrigger>

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PairPay - The simplest way to manage shared expenses for couples">
+    <meta name="keywords" content="expense tracker, couples, finance, splitwise, shared expenses">
+    <meta name="author" content="PairPay Team">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="PairPay - Shared Expenses for Couples">
+    <meta property="og:description" content="Track shared expenses with automatic 50/50 split, real-time balance, and easy settlements.">
+    <meta property="og:type" content="website">
+    
+    <title>PairPay - Shared Expenses for Couples</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #e06c75;
+            --accent: #56b6c2;
+            --bg: #ffffff;
+            --surface: #f8f9fa;
+            --text: #2c3e50;
+            --text-muted: #6c757d;
+            --border: #e9ecef;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f1419;
+                --surface: #1a1f29;
+                --text: #e6edf3;
+                --text-muted: #8b949e;
+                --border: #30363d;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Header */
+        header {
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* Hero */
+        .hero {
+            padding: 6rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .hero .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+        
+        .emoji {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(224, 108, 117, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(224, 108, 117, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary);
+        }
+        
+        /* Badges */
+        .badges {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+        }
+        
+        .badge {
+            padding: 0.5rem 1rem;
+            background: var(--surface);
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Features */
+        .section {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            padding: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        
+        /* Tech Stack */
+        .tech-stack {
+            background: var(--surface);
+            border-radius: 1rem;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .tech-item {
+            text-align: center;
+        }
+        
+        .tech-item h4 {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .tech-item p {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Code Block */
+        .code-block {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.7;
+        }
+        
+        .code-block code {
+            color: var(--text);
+        }
+        
+        /* Steps */
+        .steps {
+            counter-reset: step;
+        }
+        
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--surface);
+            border-radius: 0.75rem;
+            border: 1px solid var(--border);
+        }
+        
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .step-content h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .step-content p {
+            color: var(--text-muted);
+        }
+        
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 5rem;
+        }
+        
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 4rem 0;
+            }
+            
+            .section {
+                padding: 3rem 0;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <span>💑</span>
+                    <span>PairPay</span>
+                </a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#tech">Tech Stack</a></li>
+                        <li><a href="#getting-started">Get Started</a></li>
+                        <li><a href="https://github.com/tu-usuario/pair-pay">GitHub</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="emoji">💑</div>
+            <h1>
+                Shared Expenses,<br>
+                <span class="gradient-text">Simplified</span>
+            </h1>
+            <p>
+                For couples who share expenses, not complications. 
+                Automatic 50/50 split that's always up to date.
+            </p>
+            
+            <div class="cta-buttons">
+                <a href="https://github.com/tu-usuario/pair-pay" class="btn btn-primary">
+                    <span>View on GitHub</span>
+                    <span>→</span>
+                </a>
+                <a href="#getting-started" class="btn btn-secondary">
+                    Quick Start
+                </a>
+            </div>
+            
+            <div class="badges">
+                <span class="badge">✨ Free & Open Source</span>
+                <span class="badge">🔒 Privacy-First</span>
+                <span class="badge">📱 Mobile-First</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section">
+        <div class="container">
+            <h2 class="section-title">Core Features</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3>Quick Expense Tracking</h3>
+                    <p>Add expenses in seconds with smart categories, automatic dates, and optional notes.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">⚖️</span>
+                    <h3>Automatic 50/50 Split</h3>
+                    <p>Instant balance calculation. Always know who owes whom without a calculator.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">💰</span>
+                    <h3>Simple Settlements</h3>
+                    <p>Settle up with one click and maintain a complete history of all payments.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🎨</span>
+                    <h3>Beautiful Design</h3>
+                    <p>Premium UI/UX with Space Grotesk typography and distinctive coral/teal palette.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h3>Mobile-Optimized</h3>
+                    <p>Bottom navigation in thumb zone with 44px+ touch targets following WCAG 2.1.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🔐</span>
+                    <h3>Secure & Private</h3>
+                    <p>Row-level security with Supabase. Email + Google OAuth authentication.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section id="tech" class="section">
+        <div class="container">
+            <h2 class="section-title">Tech Stack</h2>
+            
+            <div class="tech-stack">
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h4>Framework</h4>
+                        <p>Next.js 16</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>UI Library</h4>
+                        <p>React 19</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Language</h4>
+                        <p>TypeScript 5</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Styling</h4>
+                        <p>Tailwind CSS v4</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Database</h4>
+                        <p>PostgreSQL</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Backend</h4>
+                        <p>Supabase</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>ORM</h4>
+                        <p>Prisma</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Auth</h4>
+                        <p>Supabase Auth</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started -->
+    <section id="getting-started" class="section">
+        <div class="container">
+            <h2 class="section-title">Getting Started</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-content">
+                        <h3>Clone the Repository</h3>
+                        <p>Get started by cloning the PairPay repository to your local machine.</p>
+                        <div class="code-block">
+                            <pre><code>git clone https://github.com/tu-usuario/pair-pay.git
+cd pair-pay</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-content">
+                        <h3>Install Dependencies</h3>
+                        <p>Install all required packages using pnpm.</p>
+                        <div class="code-block">
+                            <pre><code>pnpm install</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-content">
+                        <h3>Configure Environment</h3>
+                        <p>Set up your environment variables with Supabase credentials.</p>
+                        <div class="code-block">
+                            <pre><code>cp .env.example .env.local
+# Edit .env.local with your Supabase credentials</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-content">
+                        <h3>Setup Database</h3>
+                        <p>Initialize your database with Prisma migrations.</p>
+                        <div class="code-block">
+                            <pre><code>pnpm prisma migrate dev --name init</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-content">
+                        <h3>Run Development Server</h3>
+                        <p>Start the development server and open http://localhost:3000</p>
+                        <div class="code-block">
+                            <pre><code>pnpm dev</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="https://github.com/tu-usuario/pair-pay#readme" class="btn btn-primary">
+                    View Full Documentation →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture -->
+    <section class="section" style="background: var(--surface);">
+        <div class="container">
+            <h2 class="section-title">Screaming Architecture</h2>
+            <p style="text-align: center; color: var(--text-muted); max-width: 700px; margin: 0 auto 3rem;">
+                PairPay uses a domain-driven architecture where features are organized by business domain, 
+                not by technical layer. This makes the codebase easier to understand and maintain.
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🎯</span>
+                    <h3>Features by Domain</h3>
+                    <p>Auth, Balance, Couple, and Expenses features are self-contained with their own actions, queries, components, and types.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3>Server Actions</h3>
+                    <p>Next.js Server Actions for type-safe mutations without API routes. Cleaner, faster, and more maintainable.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🔒</span>
+                    <h3>Type Safety</h3>
+                    <p>End-to-end TypeScript with Prisma ORM ensures type safety from database to UI components.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>
+                Built with ❤️ for couples who share expenses<br>
+                <a href="https://github.com/tu-usuario/pair-pay">View on GitHub</a> · 
+                <a href="https://github.com/tu-usuario/pair-pay/issues">Report Issues</a> · 
+                <a href="https://github.com/tu-usuario/pair-pay/blob/main/LICENSE">MIT License</a>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.875rem;">
+                © 2026 PairPay · Made with Next.js, Supabase & Prisma
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

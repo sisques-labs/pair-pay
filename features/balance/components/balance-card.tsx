@@ -1,8 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { formatCurrency } from '@/lib/utils/format';
-import { ArrowRight, TrendingUp, TrendingDown } from 'lucide-react';
+import { ArrowRight, TrendingUp, TrendingDown, CheckCircle2 } from 'lucide-react';
 import type { CoupleBalance } from '../types';
 import { SettleBalanceButton } from './settle-balance-button';
 
@@ -19,86 +18,152 @@ export function BalanceCard({ balance, currentUserId }: BalanceCardProps) {
   const isBalanced = balance.netBalance === 0;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Balance Actual</CardTitle>
+    <Card className="overflow-hidden">
+      <CardHeader className="bg-gradient-to-br from-primary/5 to-accent/5 border-b">
+        <CardTitle className="flex items-center gap-2">
+          {isBalanced ? (
+            <CheckCircle2 className="h-5 w-5 text-green-600" />
+          ) : currentUserOwes ? (
+            <TrendingDown className="h-5 w-5 text-orange-600" />
+          ) : (
+            <TrendingUp className="h-5 w-5 text-green-600" />
+          )}
+          Balance Actual
+        </CardTitle>
         <CardDescription>Estado de las cuentas entre ambos</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="pt-8 space-y-8">
         {/* Net Balance Display */}
-        <div className="text-center py-6 space-y-2">
+        <div className="text-center space-y-4">
           {isBalanced ? (
-            <>
-              <div className="text-4xl font-bold text-green-600 dark:text-green-400">
-                ✓ Balanceado
+            <div className="space-y-3">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-950">
+                <CheckCircle2 className="h-8 w-8 text-green-600 dark:text-green-400" />
               </div>
-              <p className="text-muted-foreground">
-                Todas las cuentas están al día
-              </p>
-            </>
+              <div>
+                <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-1">
+                  ¡Todo en orden!
+                </div>
+                <p className="text-muted-foreground">
+                  No hay deudas pendientes
+                </p>
+              </div>
+            </div>
           ) : (
-            <>
-              <div className="text-sm text-muted-foreground mb-2">
-                {currentUserOwes ? (
-                  <>
-                    <TrendingDown className="inline h-4 w-4 mr-1" />
-                    Debes
-                  </>
-                ) : (
-                  <>
-                    <TrendingUp className="inline h-4 w-4 mr-1" />
-                    Te deben
-                  </>
-                )}
+            <div className="space-y-4">
+              {/* Amount */}
+              <div className="space-y-2">
+                <div className={`text-6xl md:text-7xl font-bold tabular-nums ${currentUserOwes ? 'text-orange-600 dark:text-orange-400' : 'text-green-600 dark:text-green-400'}`}>
+                  {formatCurrency(balance.netBalance)}
+                </div>
+                <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                  {currentUserOwes ? (
+                    <>
+                      <TrendingDown className="h-4 w-4" />
+                      <span>Debes pagar</span>
+                    </>
+                  ) : (
+                    <>
+                      <TrendingUp className="h-4 w-4" />
+                      <span>Te deben</span>
+                    </>
+                  )}
+                </div>
               </div>
-              <div className={`text-5xl font-bold ${currentUserOwes ? 'text-orange-600 dark:text-orange-400' : 'text-green-600 dark:text-green-400'}`}>
-                {formatCurrency(balance.netBalance)}
+
+              {/* Payment direction visual */}
+              <div className="flex items-center justify-center gap-3 py-4">
+                <div className="flex flex-col items-center gap-2">
+                  <div className={`w-12 h-12 rounded-full ${currentUserOwes ? 'bg-orange-100 dark:bg-orange-950' : 'bg-muted'} flex items-center justify-center`}>
+                    <span className="text-xl">
+                      {currentUserOwes ? '😬' : '😊'}
+                    </span>
+                  </div>
+                  <span className="text-sm font-semibold">
+                    {currentUserOwes ? 'Tú' : otherUserBalance.fullName || otherUserBalance.email.split('@')[0]}
+                  </span>
+                </div>
+
+                <div className="flex flex-col items-center">
+                  <ArrowRight className={`h-8 w-8 ${currentUserOwes ? 'text-orange-500' : 'text-green-500'}`} />
+                </div>
+
+                <div className="flex flex-col items-center gap-2">
+                  <div className={`w-12 h-12 rounded-full ${!currentUserOwes ? 'bg-green-100 dark:bg-green-950' : 'bg-muted'} flex items-center justify-center`}>
+                    <span className="text-xl">
+                      {!currentUserOwes ? '😬' : '😊'}
+                    </span>
+                  </div>
+                  <span className="text-sm font-semibold">
+                    {currentUserOwes ? otherUserBalance.fullName || otherUserBalance.email.split('@')[0] : 'Tú'}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                <span className="font-medium">
-                  {currentUserOwes ? 'Tú' : otherUserBalance.fullName || otherUserBalance.email.split('@')[0]}
-                </span>
-                <ArrowRight className="h-4 w-4" />
-                <span className="font-medium">
-                  {currentUserOwes ? otherUserBalance.fullName || otherUserBalance.email.split('@')[0] : 'Tú'}
-                </span>
-              </div>
-            </>
+            </div>
           )}
         </div>
 
         <Separator />
 
         {/* Individual Balances */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="text-center space-y-1">
-            <div className="text-sm text-muted-foreground">
-              {currentUserBalance.fullName || 'Tú'}
-            </div>
-            <div className="space-y-2">
-              <div>
-                <div className="text-xs text-muted-foreground">Pagado</div>
-                <div className="font-semibold">{formatCurrency(currentUserBalance.totalPaid)}</div>
+        <div>
+          <h3 className="text-sm font-semibold text-muted-foreground mb-4 uppercase tracking-wider">
+            Desglose Individual
+          </h3>
+          <div className="grid grid-cols-2 gap-6">
+            {/* Current User */}
+            <div className="space-y-3">
+              <div className="text-sm font-semibold text-foreground">
+                {currentUserBalance.fullName || 'Tú'}
               </div>
-              <div>
-                <div className="text-xs text-muted-foreground">Debe pagar</div>
-                <div className="font-semibold">{formatCurrency(currentUserBalance.totalOwed)}</div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-muted-foreground">Has pagado</span>
+                  <span className="font-mono font-semibold text-sm">
+                    {formatCurrency(currentUserBalance.totalPaid)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-muted-foreground">Debes pagar</span>
+                  <span className="font-mono font-semibold text-sm">
+                    {formatCurrency(currentUserBalance.totalOwed)}
+                  </span>
+                </div>
+                <Separator className="my-2" />
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-semibold">Balance</span>
+                  <span className={`font-mono font-bold ${currentUserBalance.balance >= 0 ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                    {currentUserBalance.balance >= 0 ? '+' : ''}{formatCurrency(Math.abs(currentUserBalance.balance))}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="text-center space-y-1">
-            <div className="text-sm text-muted-foreground">
-              {otherUserBalance.fullName || otherUserBalance.email.split('@')[0]}
-            </div>
-            <div className="space-y-2">
-              <div>
-                <div className="text-xs text-muted-foreground">Pagado</div>
-                <div className="font-semibold">{formatCurrency(otherUserBalance.totalPaid)}</div>
+            {/* Other User */}
+            <div className="space-y-3">
+              <div className="text-sm font-semibold text-foreground">
+                {otherUserBalance.fullName || otherUserBalance.email.split('@')[0]}
               </div>
-              <div>
-                <div className="text-xs text-muted-foreground">Debe pagar</div>
-                <div className="font-semibold">{formatCurrency(otherUserBalance.totalOwed)}</div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-muted-foreground">Ha pagado</span>
+                  <span className="font-mono font-semibold text-sm">
+                    {formatCurrency(otherUserBalance.totalPaid)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-muted-foreground">Debe pagar</span>
+                  <span className="font-mono font-semibold text-sm">
+                    {formatCurrency(otherUserBalance.totalOwed)}
+                  </span>
+                </div>
+                <Separator className="my-2" />
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-semibold">Balance</span>
+                  <span className={`font-mono font-bold ${otherUserBalance.balance >= 0 ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                    {otherUserBalance.balance >= 0 ? '+' : ''}{formatCurrency(Math.abs(otherUserBalance.balance))}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

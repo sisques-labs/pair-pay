@@ -41,7 +41,7 @@ export async function getCoupleBalance(): Promise<CoupleBalance | null> {
 
     // Calculate total expenses
     const totalExpenses = expenses.reduce(
-      (sum, expense) => sum + expense.amount.toNumber(),
+      (sum: number, expense) => sum + expense.amount.toNumber(),
       0
     );
     const halfExpenses = totalExpenses / 2;
@@ -49,20 +49,20 @@ export async function getCoupleBalance(): Promise<CoupleBalance | null> {
     // Calculate how much each user paid
     const user1Paid = expenses
       .filter(e => e.paidBy === user1.id)
-      .reduce((sum, e) => sum + e.amount.toNumber(), 0);
+      .reduce((sum: number, e) => sum + e.amount.toNumber(), 0);
 
     const user2Paid = expenses
       .filter(e => e.paidBy === user2.id)
-      .reduce((sum, e) => sum + e.amount.toNumber(), 0);
+      .reduce((sum: number, e) => sum + e.amount.toNumber(), 0);
 
     // Calculate settlements offset
     const user1SettlementsPaid = settlements
       .filter(s => s.fromUser === user1.id)
-      .reduce((sum, s) => sum + s.amount.toNumber(), 0);
+      .reduce((sum: number, s) => sum + s.amount.toNumber(), 0);
 
     const user2SettlementsPaid = settlements
       .filter(s => s.fromUser === user2.id)
-      .reduce((sum, s) => sum + s.amount.toNumber(), 0);
+      .reduce((sum: number, s) => sum + s.amount.toNumber(), 0);
 
     // Calculate net balance (positive = user1 owes user2, negative = user2 owes user1)
     const user1Balance = user1Paid - halfExpenses - user1SettlementsPaid + user2SettlementsPaid;

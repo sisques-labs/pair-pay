@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ArrowLeft, AlertCircle, RefreshCw } from 'lucide-react';
 import { getCurrentUser } from '@/features/auth/actions';
 import { getCurrentCouple } from '@/features/couple/actions';
 import { getCoupleBalance, getSettlements } from '@/features/balance/queries';
@@ -25,8 +26,21 @@ export default async function BalancePage() {
   if (!balance) {
     return (
       <div className="container max-w-4xl mx-auto py-8 px-4">
-        <div className="text-center">
-          <p>No se pudo calcular el balance</p>
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error al cargar balance</AlertTitle>
+          <AlertDescription>
+            No pudimos calcular el balance. Esto puede deberse a un problema temporal con la conexión.
+          </AlertDescription>
+        </Alert>
+        <div className="mt-4 flex gap-2">
+          <Button onClick={() => window.location.reload()} variant="outline">
+            <RefreshCw className="h-4 w-4" />
+            Reintentar
+          </Button>
+          <Button asChild variant="ghost">
+            <Link href="/expenses">Volver a gastos</Link>
+          </Button>
         </div>
       </div>
     );

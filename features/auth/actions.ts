@@ -80,3 +80,33 @@ export async function getCurrentUser() {
   } = await supabase.auth.getUser();
   return user;
 }
+
+/**
+ * Login with Google OAuth
+ */
+export async function loginWithGoogle() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    return {
+      success: false,
+      error: {
+        message: error.message,
+        code: error.code,
+      },
+    };
+  }
+
+  if (data.url) {
+    redirect(data.url);
+  }
+
+  return { success: true };
+}

@@ -111,3 +111,34 @@ pnpm prisma migrate reset
 - Use Supabase Client for authentication
 - Connection string in `.env.local`: `DATABASE_URL`
 - Direct connection string for migrations: `DIRECT_URL`
+
+## Authentication & Middleware
+
+### Supabase Proxy (Next.js 15+ Pattern)
+This project uses the **proxy pattern** instead of the traditional `middleware.ts` file, which is the recommended approach for Next.js 15+ with Supabase SSR.
+
+#### File Structure
+- **`proxy.ts`** (root): Exports the `proxy` function and route matcher config
+- **`lib/supabase/middleware.ts`**: Contains the actual Supabase session management logic
+
+#### How It Works
+1. The `proxy.ts` file exports a `proxy` function that Next.js calls for matched routes
+2. It delegates to `updateSession()` from `lib/supabase/middleware.ts`
+3. The middleware handles:
+   - Session refresh and cookie management using `@supabase/ssr`
+   - Protected route authentication (redirects to `/login` if not authenticated)
+   - Auth page redirection (redirects to `/expenses` if already logged in)
+
+#### Route Matching
+The proxy runs on all routes except:
+- `_next/static` (static files)
+- `_next/image` (image optimization)
+- `favicon.ico`
+- Image files (`.svg`, `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`)
+
+#### Protected Routes
+- All routes except `/`, `/login`, and `/register` require authentication
+- Unauthenticated users are redirected to `/login`
+- Authenticated users accessing auth pages are redirected to `/expenses`
+
+**Note**: Do NOT create a `middleware.ts` file in the root - use the `proxy.ts` pattern as configured.
